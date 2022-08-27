@@ -31,7 +31,7 @@ class ActiveStatus extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('active', $value);
+        return $query->where('is_active', $value);
     }
 
     /**

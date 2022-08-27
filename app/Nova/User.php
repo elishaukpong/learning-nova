@@ -63,7 +63,7 @@ class User extends Resource
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
-            Boolean::make('Active','active'),
+            Boolean::make('Active','is_active'),
         ];
     }
 
