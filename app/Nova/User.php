@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Nova\Filters\ActiveStatus;
+use App\Nova\Lenses\TopBuyers;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
@@ -99,7 +100,9 @@ class User extends Resource
      */
     public function lenses(Request $request)
     {
-        return [];
+        return [
+            new TopBuyers
+        ];
     }
 
     /**

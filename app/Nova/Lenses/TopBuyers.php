@@ -21,11 +21,21 @@ class TopBuyers extends Lens
     public static function query(LensRequest $request, $query)
     {
         return $request->withOrdering($request->withFilters(
-            $query
-                ->select(DB::Raw('users.id as `id`, users.name as `name`, sum(product.price) as `total'))
-                ->join('orders', 'users.id', '=', 'orders.user_id')
-                ->join('products', 'products.id', '=', 'orders.product_id')
-                ->groupBy('users.id')
+//            $query
+//                ->select(DB::Raw('users.id as `id`, users.name as `name`, sum(products.price) as `total`'))
+//                ->join('orders', 'users.id', '=', 'orders.user_id')
+//                ->join('products', 'products.id', '=', 'orders.product_id')
+//                ->groupBy('users.id')
+//
+
+            $query->from(function($query){
+                $query->from('users')
+                    ->select(DB::Raw('users.id as `id`, users.name as `name`, sum(products.price) as `total`'))
+                    ->join('orders', 'users.id', '=', 'orders.user_id')
+                    ->join('products', 'products.id', '=', 'orders.product_id')
+                    ->groupBy('users.id');
+            },'users')->select('id','name','total')
+
         ));
     }
 
@@ -40,8 +50,10 @@ class TopBuyers extends Lens
         return [
             ID::make(__('ID'), 'id')
                 ->sortable(),
-            Text::make('Name'),
-            Text::make('Total'),
+            Text::make('Name')
+                ->sortable(),
+            Text::make('Total')
+                ->sortable(),
         ];
     }
 
