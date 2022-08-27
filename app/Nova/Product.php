@@ -3,21 +3,23 @@
 namespace App\Nova;
 
 use App\Nova\Filters\ActiveStatus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Product extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Product::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +34,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'email',
+        'name',
     ];
 
     /**
@@ -44,26 +46,25 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')
+                ->sortable(),
 
-            Gravatar::make()->maxWidth(50),
+            Text::make('Name','name')
+                ->withMeta([
+                    "extraAttributes" => ['placeholder' => 'Please, Input your name correctly']
+                ])
+                ->rules('required'),
 
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            Textarea::make('Description','description'),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+            Date::make('Published Date', 'date_published')
+                ->rules('required', function($attribute, $value, $fail){
+                    if(Carbon::createFromFormat('Y-m-d', $value)->isPast()){
+                        $fail('Please provide only future dates');
+                    }
+                }),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
-
-            Boolean::make('Active','active'),
+            Boolean::make('Active', 'is_active')
         ];
     }
 
