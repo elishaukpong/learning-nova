@@ -2,32 +2,25 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\ActiveStatus;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Product extends Resource
+class Order extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Product::class;
+    public static $model = \App\Models\Order::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -35,7 +28,7 @@ class Product extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id',
     ];
 
     /**
@@ -47,27 +40,7 @@ class Product extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')
-                ->sortable(),
-
-            Text::make('Name','name')
-                ->withMeta([
-                    "extraAttributes" => ['placeholder' => 'Please, Input your name correctly']
-                ])
-                ->rules('required'),
-
-            Textarea::make('Description','description'),
-
-            Date::make('Published Date', 'date_published')
-                ->rules('required', function($attribute, $value, $fail){
-                    if(Carbon::createFromFormat('Y-m-d', $value)->isPast()){
-                        $fail('Please provide only future dates');
-                    }
-                }),
-
-            Number::make('Price', 'price'),
-
-            Boolean::make('Active', 'is_active')
+            ID::make(__('ID'), 'id')->sortable(),
         ];
     }
 
@@ -90,9 +63,7 @@ class Product extends Resource
      */
     public function filters(Request $request)
     {
-        return [
-            new ActiveStatus
-        ];
+        return [];
     }
 
     /**
