@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ChangeActiveStatus;
 use App\Nova\Filters\ActiveStatus;
 use App\Nova\Lenses\TopBuyers;
 use Illuminate\Http\Request;
@@ -113,6 +114,8 @@ class User extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new ChangeActiveStatus
+        ];
     }
 }

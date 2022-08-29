@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ChangeActiveStatus;
 use App\Nova\Filters\ActiveStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -114,6 +115,8 @@ class Product extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new ChangeActiveStatus
+        ];
     }
 }
