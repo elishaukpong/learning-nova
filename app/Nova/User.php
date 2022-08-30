@@ -6,6 +6,7 @@ use App\Nova\Actions\ChangeActiveStatus;
 use App\Nova\Filters\ActiveStatus;
 use App\Nova\Lenses\TopBuyers;
 use App\Nova\Metrics\NewUsers;
+use App\Nova\Metrics\UsersByActiveType;
 use App\Nova\Metrics\UsersPerDay;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
@@ -81,7 +82,8 @@ class User extends Resource
     {
         return [
             new NewUsers,
-            new UsersPerDay
+            new UsersPerDay,
+            new UsersByActiveType
         ];
     }
 
