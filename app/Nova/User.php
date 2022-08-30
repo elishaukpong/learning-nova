@@ -5,6 +5,8 @@ namespace App\Nova;
 use App\Nova\Actions\ChangeActiveStatus;
 use App\Nova\Filters\ActiveStatus;
 use App\Nova\Lenses\TopBuyers;
+use App\Nova\Metrics\NewUsers;
+use App\Nova\Metrics\UsersPerDay;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
@@ -77,7 +79,10 @@ class User extends Resource
      */
     public function cards(Request $request)
     {
-        return [];
+        return [
+            new NewUsers,
+            new UsersPerDay
+        ];
     }
 
     /**
